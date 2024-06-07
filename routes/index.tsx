@@ -1,6 +1,7 @@
 import { useSignal } from "@preact/signals";
 import type { Signal } from "@preact/signals";
 import Search from "../islands/Search.tsx";
+import Test from "../islands/Test.tsx"
 import { Client } from "https://deno.land/x/postgres@v0.19.3/mod.ts";
 
 const client = new Client({
@@ -33,10 +34,8 @@ export default async function Home() {
           Try updating this message in the
           <code class="mx-2">./routes/index.tsx</code> {result.rows}
         </p>
-        <form action="/sResult" method="get">
-        <input type="text" name="username"></input>
         <Search/>
-        </form>
+        <Test/>
       </div>
     </div>
   );
