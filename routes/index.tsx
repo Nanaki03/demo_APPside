@@ -5,36 +5,22 @@ import Test from "../islands/Test.tsx";
 import Insert from "../islands/Insert.tsx";
 import Delete from "../islands/Delete.tsx";
 import Update from "../islands/Update.tsx";
-import { Client } from "https://deno.land/x/postgres@v0.19.3/mod.ts";
 
-const client = new Client({
-  user: "postgres",
-  database: "postgres",
-  password: "postgres",
-  hostname: "db",
-  port: 5432,
-});
-await client.connect();
 
-export default async function Home() {
-  const result = await client.queryArray("SELECT * FROM people WHERE id=1");
-
-  //const count = useSignal(3);
-
+export default function Home() {
   return (
     <div class="px-4 py-8 mx-auto bg-[#86efac]">
       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
         <img
           class="my-6"
-          src="/logo.svg"
+          src="/taskhub.PNG"
           width="128"
           height="128"
-          alt="the Fresh logo: a sliced lemon dripping with juice"
+          alt="taskhub logo"
         />
-        <h1 class="text-4xl font-bold">Welcome to Fresh</h1>
+        <h1 class="text-4xl font-bold">Welcome to DBApp for CRUD</h1>
         <p class="my-4">
-          Try updating this message in the
-          <code class="mx-2">./routes/index.tsx</code> {result.rows}
+          Deno.js Fresh PostgreSQL tailwindCSSを用いた簡単なCRUD操作が可能なWebアプリケーション
         </p>
         <Search />
         <Insert />
