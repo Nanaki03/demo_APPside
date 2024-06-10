@@ -1,7 +1,10 @@
 import { useSignal } from "@preact/signals";
 import type { Signal } from "@preact/signals";
 import Search from "../islands/Search.tsx";
-import Test from "../islands/Test.tsx"
+import Test from "../islands/Test.tsx";
+import Insert from "../islands/Insert.tsx";
+import Delete from "../islands/Delete.tsx";
+import Update from "../islands/Update.tsx";
 import { Client } from "https://deno.land/x/postgres@v0.19.3/mod.ts";
 
 const client = new Client({
@@ -12,7 +15,6 @@ const client = new Client({
   port: 5432,
 });
 await client.connect();
-
 
 export default async function Home() {
   const result = await client.queryArray("SELECT * FROM people WHERE id=1");
@@ -34,8 +36,10 @@ export default async function Home() {
           Try updating this message in the
           <code class="mx-2">./routes/index.tsx</code> {result.rows}
         </p>
-        <Search/>
-        <Test/>
+        <Search />
+        <Insert />
+        <Delete />
+        <Update/>
       </div>
     </div>
   );

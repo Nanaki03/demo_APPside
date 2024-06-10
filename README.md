@@ -16,7 +16,8 @@ deno task start
 This will watch the project directory and restart as necessary.
 
 deno.jsonはworkplace直下に1個だけじゃないと動かない(Releなんとかみたいなエラーが出る)
->Deno: Cache~~~みたいなやつでキャッシュにモジュールが読み込まれる。(Uncacheみたいなエラーがでる)
+>Deno:
+Cache~~~みたいなやつでキャッシュにモジュールが読み込まれる。(Uncacheみたいなエラーがでる)
 これをしないとエラーがでてとても邪魔
 コンテナ間でデータベースを連結するのはまあまあ簡単（Denoのモジュールが優秀）
 コンテナを立てる時にテンプレートがDeno+PostgresSQLしかないので、あきらめてPostgresSQLを使う。

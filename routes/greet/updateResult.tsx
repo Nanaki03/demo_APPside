@@ -25,19 +25,18 @@ export const handler: Handlers<User> = {
     const url = new URL(req.url);
     const sid = url.searchParams.get("userID") || "";
     const id = Number(sid);
+    const username=url.searchParams.get("userName") || "";
+    const usernameAfter=url.searchParams.get("userNameAfter") || "";
+
+    const a=await client.queryArray<[string]>`UPDATE people SET name=${usernameAfter} WHERE id=${id} AND name=${username}`;
+
+
+
     let array: Array<[number, string]>;
-    if (id !== 0) {
-      const qr = await client.queryArray<[number, string]>(
-        `SELECT * FROM people WHERE id = $1`,
-        [id],
-      );
-      array = qr.rows;
-    } else {
-      const qr = await client.queryArray<[number, string]>(
+    const qr = await client.queryArray<[number, string]>(
         `SELECT * FROM people`,
-      );
+        );
       array = qr.rows;
-    }
     const rID: number[] = array.map((row) => row[0]);
     const rName: string[] = array.map((row) => row[1]);
     return ctx.render({ rID, rName });
@@ -49,18 +48,31 @@ export default function Page({ data }: PageProps<User>) {
   return (
     <div class="px-4 py-8 mx-auto bg-[#86efac]">
       <form>
+      <a>変更するID:</a>
         <input
-          class="object-center border-solid rounded border-2"
+          class="object-center rounded border-2"
           type="text"
           name="userID"
+        />
+        <br></br>
+        <a>変更前の名前:</a>
+        <input
+          class="object-center rounded border-2"
+          type="text"
+          name="userName"
+        />
+        <br></br>
+        <a>変更後の名前:</a>
+        <input
+          class="object-center rounded border-2"
+          type="text"
+          name="userNameAfter"
         />
         <br></br>
         <button
           class="px-2 py-1 border-gray-500 border-2 rounded bg-white hover:bg-gray-200 transition-colors"
           type="submit"
-        >
-          Search
-        </button>
+        >UPDATE</button>
       </form>
       <ul>
         {rID.map((id, index) => (

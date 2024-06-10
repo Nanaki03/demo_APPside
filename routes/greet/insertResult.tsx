@@ -15,60 +15,62 @@ const client = new Client({
 
 await client.connect();
 
-interface User {
-  rID: number[];
-  rName: string[];
+interface UserOne {
+  id: number;
+  name: string;
 }
 
-export const handler: Handlers<User> = {
+export const handler: Handlers<UserOne> = {
   async GET(req, ctx) {
     const url = new URL(req.url);
     const sid = url.searchParams.get("userID") || "";
     const id = Number(sid);
-    let array: Array<[number, string]>;
+    const name = url.searchParams.get("userName") || "";
+
     if (id !== 0) {
-      const qr = await client.queryArray<[number, string]>(
-        `SELECT * FROM people WHERE id = $1`,
-        [id],
-      );
-      array = qr.rows;
-    } else {
-      const qr = await client.queryArray<[number, string]>(
-        `SELECT * FROM people`,
-      );
-      array = qr.rows;
+      const qr = await client.queryObject<
+        [number, string]
+      >`INSERT INTO people VALUES(${id}, ${name})`;
     }
-    const rID: number[] = array.map((row) => row[0]);
-    const rName: string[] = array.map((row) => row[1]);
-    return ctx.render({ rID, rName });
+
+    return ctx.render({ id, name });
   },
 };
 
-export default function Page({ data }: PageProps<User>) {
-  const { rID, rName } = data;
+export default function Page({ data }: PageProps<UserOne>) {
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  const { id, name } = data;
+  console.log(data);
+  console.log(id);
+  console.log(name);
   return (
     <div class="px-4 py-8 mx-auto bg-[#86efac]">
       <form>
+        <a>ID:</a>
         <input
-          class="object-center border-solid rounded border-2"
+          class="object-center rounded border-2"
           type="text"
           name="userID"
+        />
+        <br></br>
+        <a>名前:</a>
+        <input
+          class="object-center rounded border-2"
+          type="text"
+          name="userName"
         />
         <br></br>
         <button
           class="px-2 py-1 border-gray-500 border-2 rounded bg-white hover:bg-gray-200 transition-colors"
           type="submit"
         >
-          Search
+          Insert
         </button>
       </form>
-      <ul>
-        {rID.map((id, index) => (
-          <li key={id}>
-            <a>{id}: {rName[index]}</a>
-          </li>
-        ))}
-      </ul>
+      {id !== 0 && <h1>ID:{id}に"{name}"を追加しました。</h1>}
       <Home />
     </div>
   );
